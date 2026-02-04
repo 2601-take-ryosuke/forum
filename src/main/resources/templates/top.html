@@ -31,7 +31,7 @@
                 <span class="date-time" th:text="${#temporals.format(content.updatedDate, 'yyyy/MM/dd HH:mm')}"/>
             </div>
             <div class="text">
-                <span th:text="'投稿 : ' + ${content.content}"/>
+                <pre><span th:text="${content.content}"/></pre>
             </div>
         </div>
         <div class="delete-button">
@@ -56,7 +56,7 @@
                     <span class="date-time" th:text="${#temporals.format(comment.updatedDate, 'yyyy/MM/dd HH:mm')}"/>
                 </div>
                 <div class="text">
-                    <span th:text="'返信 : ' + ${comment.content}"/>
+                    <pre><span th:text="${comment.content}"/></pre>
                 </div>
                 <div class="delete-button">
                     <form th:action="@{/comment/delete/{id}(id=${comment.id})}" th:method="delete">
