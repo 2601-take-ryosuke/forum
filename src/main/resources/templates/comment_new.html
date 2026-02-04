@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="styleSheet">
+    <title>新規投稿</title>
+</head>
+<body>
+<div class="header-contents">
+    <h2>新規投稿</h2>
+</div>
+<div class="main-contents">
+    <div class="message-icon">
+        <div>
+            ID : <span th:text="${report.id}"/>
+        </div>
+        <div class="text">
+            投稿 : <span th:text="${report.content}"/>
+        </div>
+    </div>
+    <form method="post" action="/comment/add" th:object="${formModel}">
+        <div class="form-area">
+            <input type="hidden" th:field="*{reportId}" th:value="*{reportId}">
+            <label>返信内容</label>
+            <textarea class="tweet-box" th:field="*{content}" size="20" maxlength="200" /></textarea><br/>
+            <input type="submit" value="返信" />
+        </div>
+    </form>
+</div>
+<div class="footer-contents">
+    <form action="/">
+        <input type="submit" value="戻る" />
+    </form>
+</div>
+</body>
+</html>
+
