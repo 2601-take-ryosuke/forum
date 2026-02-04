@@ -6,7 +6,9 @@ import com.example.forum.repository.entity.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,14 +20,25 @@ public class ReportService {
     /*
      * レコード全件取得処理
      */
-    public List<ReportForm> findAllReport(LocalDateTime since, LocalDateTime until) {
-
-        since = (since == null ? LocalDateTime.of(2020, 1, 1, 0, 0, 0) : since);
-        until = (until == null ? LocalDateTime.now() : until);
-        List<Report> results = reportRepository.findByCreatedDateBetweenOrderByIdDesc(since, until);
-//        List<Report> results = reportRepository.findAllByOrderByIdDesc();
+    public List<ReportForm> findAllReport() {
+        List<Report> results = reportRepository.findAllByOrderByIdDesc();
         List<ReportForm> reports = setReportForm(results);
         return reports;
+    }
+
+    /*
+     * レコード取得(日付絞り込み)処理
+     */
+    public List<ReportForm> findReportBetween(LocalDate sinceDate, LocalDate untilDate) {
+
+        sinceDate = sinceDate == null ? LocalDate.of(2020,1,1) : sinceDate;
+        untilDate = untilDate == null ? LocalDate.now() : untilDate;
+
+        LocalDateTime sinceDateTime = sinceDate.atStartOfDay();
+        LocalDateTime untilDateTime = untilDate.atTime(23, 59, 59);
+
+        List<Report> results = reportRepository.findByCreatedDateBetweenOrderByIdDesc(sinceDateTime, untilDateTime);
+        return setReportForm(results);
     }
 
     /*

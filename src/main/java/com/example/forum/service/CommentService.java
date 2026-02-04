@@ -18,7 +18,7 @@ public class CommentService {
      * レコード全件取得処理
      */
     public List<CommentForm> findAllComment() {
-        List<Comment> results = commentRepository.findAllByOrderByIdDesc();
+        List<Comment> results = commentRepository.findAllByOrderByIdAsc();
         List<CommentForm> comments = setCommentForm(results);
         return comments;
     }

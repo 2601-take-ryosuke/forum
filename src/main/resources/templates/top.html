@@ -10,16 +10,28 @@
     <h1>匿名掲示板</h1>
 </div>
 <div class="main-contents">
+    <div class="filter-area">
+        <div class="date-filter">
+            <form th:object="${dateFilterForm}" th:action="@{/(since=*{since}, until=*{until})}" method="get">
+                <label>日付：</label>
+                <input type="date" th:field="*{since}" th:value="*{since}">
+                <label>～</label>
+                <input type="date" th:field="*{until}" th:value="*{until}">
+                <input type="submit" value="絞り込み">
+            </form>
+        </div>
+    </div>
     <a href="/new">
         <button class="new-button" type="button">新規投稿</button>
     </a>
     <div class="message-icon" th:each="content : ${contents}">
         <div class="message">
             <div>
-                ID : <span th:text="${content.id}"/>
+                <span th:text="'ID : ' + ${content.id}"/>
+                <span class="date-time" th:text="${#temporals.format(content.updatedDate, 'yyyy/MM/dd HH:mm')}"/>
             </div>
             <div class="text">
-                投稿 : <span th:text="${content.content}"/>
+                <span th:text="'投稿 : ' + ${content.content}"/>
             </div>
         </div>
         <div class="delete-button">
@@ -40,10 +52,11 @@
         <div class="comments-area">
             <div class="comment-icon" th:each="comment : ${comments}" th:if="${comment.reportId}==${content.id}">
                 <div>
-                    返信ID : <span th:text="${comment.id}"/>
+                    <span th:text="'返信ID : ' + ${comment.id}"/>
+                    <span class="date-time" th:text="${#temporals.format(comment.updatedDate, 'yyyy/MM/dd HH:mm')}"/>
                 </div>
                 <div class="text">
-                    返信 : <span th:text="${comment.content}"/>
+                    <span th:text="'返信 : ' + ${comment.content}"/>
                 </div>
                 <div class="delete-button">
                     <form th:action="@{/comment/delete/{id}(id=${comment.id})}" th:method="delete">

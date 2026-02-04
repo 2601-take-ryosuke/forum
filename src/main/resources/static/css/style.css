@@ -163,3 +163,9 @@ input[type="submit"], [type="button"]{
 .delete-button{
     display:inline-block;
 }
+
+.date-time{
+    font-size: 10px;
+    font-color: #A0A0A0;
+    margin-left: 20px;
+}

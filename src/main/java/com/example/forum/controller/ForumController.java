@@ -1,6 +1,7 @@
 package com.example.forum.controller;
 
 import com.example.forum.controller.form.CommentForm;
+import com.example.forum.controller.form.DateFilterForm;
 import com.example.forum.controller.form.ReportForm;
 import com.example.forum.service.CommentService;
 import com.example.forum.service.ReportService;
@@ -9,6 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.List;
 
 @Controller
@@ -19,20 +24,45 @@ public class ForumController {
     @Autowired
     CommentService commentService;
 
+    final String DATE_FORMAT = "uuuu-MM-dd";
+    final DateTimeFormatter  DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT).withResolverStyle(ResolverStyle.STRICT);
+
     /*
      * 投稿内容表示処理
      */
     @GetMapping
-    public ModelAndView top() {
+    public ModelAndView top(@RequestParam(value = "since", required = false) String since,
+                            @RequestParam(value = "until", required = false) String until) {
         ModelAndView mav = new ModelAndView();
+        LocalDate sinceDate = null;
+        LocalDate untilDate = null;
+
+        try {
+            if (since != null && !since.isBlank()) {
+                sinceDate = LocalDate.parse(since, DATE_FORMATTER);
+            }
+
+            if (until != null && !until.isBlank()) {
+                untilDate = LocalDate.parse(until, DATE_FORMATTER);
+            }
+        } catch (DateTimeParseException e) {
+            since = "";
+            until = "";
+        }
+
         // 投稿を全件取得
-        List<ReportForm> contentData = reportService.findAllReport(null,null);
+        List<ReportForm> contentData = reportService.findReportBetween(sinceDate, untilDate);
         List<CommentForm> commentData = commentService.findAllComment();
+
+        DateFilterForm dateFilterForm = new DateFilterForm();
+        dateFilterForm.setSince(since);
+        dateFilterForm.setUntil(until);
         // 画面遷移先を指定
         mav.setViewName("/top");
         // 投稿データオブジェクトを保管
         mav.addObject("contents", contentData);
         mav.addObject("comments", commentData);
+        mav.addObject("dateFilterForm", dateFilterForm);
         return mav;
     }
 
