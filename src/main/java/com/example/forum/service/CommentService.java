@@ -2,15 +2,19 @@ package com.example.forum.service;
 
 import com.example.forum.controller.form.CommentForm;
 import com.example.forum.repository.CommentRepository;
+import com.example.forum.repository.ReportRepository;
 import com.example.forum.repository.entity.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CommentService {
+    @Autowired
+    ReportRepository reportRepository;
     @Autowired
     CommentRepository commentRepository;
 
@@ -29,6 +33,8 @@ public class CommentService {
     public void saveComment(CommentForm reqComment) {
         Comment saveComment = setCommentEntity(reqComment);
         commentRepository.save(saveComment);
+
+        reportRepository.updateThreadUpdatedDateById(saveComment.getReportId(), LocalDateTime.now());
     }
 
     public void deleteComment(Integer id){

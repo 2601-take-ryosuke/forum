@@ -13,5 +13,6 @@ public class ReportForm {
     private String content;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
+    private LocalDateTime threadUpdatedDate;
 }
 

@@ -32,8 +32,9 @@ public class Report {
     private LocalDateTime createdDate;
 
     @Column
-    @UpdateTimestamp
-    @LastModifiedDate
     private LocalDateTime updatedDate;
+
+    @Column
+    private LocalDateTime threadUpdatedDate;
 }
 

@@ -37,7 +37,7 @@ public class ReportService {
         LocalDateTime sinceDateTime = sinceDate.atStartOfDay();
         LocalDateTime untilDateTime = untilDate.atTime(23, 59, 59);
 
-        List<Report> results = reportRepository.findByCreatedDateBetweenOrderByIdDesc(sinceDateTime, untilDateTime);
+        List<Report> results = reportRepository.findByCreatedDateBetweenOrderByThreadUpdatedDateDesc(sinceDateTime, untilDateTime);
         return setReportForm(results);
     }
 
@@ -46,6 +46,9 @@ public class ReportService {
      */
     public void saveReport(ReportForm reqReport) {
         Report saveReport = setReportEntity(reqReport);
+        LocalDateTime current = LocalDateTime.now();
+        saveReport.setUpdatedDate(current);
+        saveReport.setThreadUpdatedDate(current);
         reportRepository.save(saveReport);
     }
 
@@ -76,6 +79,7 @@ public class ReportService {
             report.setContent(result.getContent());
             report.setCreatedDate(result.getCreatedDate());
             report.setUpdatedDate(result.getUpdatedDate());
+            report.setThreadUpdatedDate(result.getThreadUpdatedDate());
             reports.add(report);
         }
         return reports;
@@ -90,6 +94,7 @@ public class ReportService {
         report.setContent(reqReport.getContent());
         report.setCreatedDate(reqReport.getCreatedDate());
         report.setUpdatedDate(reqReport.getUpdatedDate());
+        report.setThreadUpdatedDate(reqReport.getThreadUpdatedDate());
         return report;
     }
 }
