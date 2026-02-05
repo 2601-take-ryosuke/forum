@@ -166,6 +166,11 @@ input[type="submit"], [type="button"]{
 
 .date-time{
     font-size: 10px;
-    font-color: #A0A0A0;
+    color: #A0A0A0;
     margin-left: 20px;
+}
+
+.error-message{
+    margin-left: 5px;
+    color: #FF0000;
 }
